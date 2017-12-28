@@ -15,7 +15,7 @@ class list {
         list(){
             head = NULL;
         } // End of list()
-        
+
         //=====================================================================
         //=====================================================================
         void AddNode(int value){
@@ -32,21 +32,68 @@ class list {
                 tail->next = newNode;
                 tail = newNode;
             }
-        } // End of AddNode
-        
+        } // End of AddNode(int)
+
+        //=====================================================================
+        //=====================================================================
+        bool AddNode(int index, int value){
+            // Invalid index
+            if(index < 0 || (!this->Find(index - 1) && index != 0))
+                return false;
+
+            node* newNode = new node;
+            // Insert new value at beginning of list
+            if (value == 0) {
+                newNode->value = value;
+                newNode->next = head;
+                head = newNode;
+            }
+            else{
+                node *prevNode = this->Find(index - 1);
+                newNode->value = value;
+                newNode->next = prevNode->next;
+                prevNode->next = newNode;
+            }
+
+            if (newNode->next == NULL)
+                tail = newNode;
+
+            return true;
+
+        } // End of AddNode(int, int)
+
         //=====================================================================
         //=====================================================================
         void Print(void){
             cout << "Printing list: ";
-            
+
             for(node *currNode = head; currNode != NULL; currNode = currNode->next){
                 cout << currNode->value << " ";
             }
-            
+
             cout << endl;
-            
-        } // End of Print
-        
+
+        } // End of Print(void)
+
+
+        //=====================================================================
+        //=====================================================================
+        node* Find(int index){
+            int counter = 0;
+            node *currNode = head;
+
+            if(index < 0)
+                return NULL;
+
+            while(currNode != NULL && counter < index){
+                ++counter;
+                currNode = currNode->next;
+            }
+
+            return currNode;
+        }// End of Find(int)
+
+
         //=====================================================================
         //=====================================================================
         bool Delete(int target){
@@ -71,14 +118,29 @@ class list {
                 }
                 // update previous node before next loop
                 prev = currNode;
-                
+
             }
-            
+
             // Target value was not found
             return false;
-            
-        } // End of Delete
-        
+
+        } // End of Delete(int)
+
+
+        //=====================================================================
+        //=====================================================================
+        void Clear(void){
+            node* prevNode = head;
+
+            while(head != NULL){
+                head = head->next;
+                delete prevNode;
+                prevNode = head;
+            }
+
+        }// End of Clear(void)
+
+
         //=====================================================================
         //=====================================================================
         bool Search(int target){
@@ -89,13 +151,13 @@ class list {
                     return true;
                 }
             }
-            
+
             // Target value was not found
             return false;
-            
-        } // End of Search
-        
-    
+
+        } // End of Search(int)
+
+
     private:
         node *head, *tail;
 };
