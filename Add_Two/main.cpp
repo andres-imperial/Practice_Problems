@@ -40,6 +40,8 @@ list AddTwo(list list1, list list2){
 
     for(int i = 0; i < list1.Length(); ++i){
         total += list1.Find(i)->value * pow(10, i);
+    }
+    for(int i = 0; i < list2.Length(); ++i){
         total += list2.Find(i)->value * pow(10, i);
     }
 
@@ -49,11 +51,6 @@ list AddTwo(list list1, list list2){
     for(int i = totalStr.length() - 1; i >= 0; --i){
         result.AddNode(int(totalStr[i]) - '0');
     }
-
-    // for(int i = 1; mod != total; ++i){
-    //     mod = (total % int(pow(10,i))) / pow(10, i-1);
-    //     result.AddNode(mod);
-    // }
 
     return result;
 
