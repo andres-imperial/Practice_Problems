@@ -1,3 +1,6 @@
+// Author: Andres Imperial
+// Contact: andres.imperial@live.com
+// File: list.h
 #ifndef LIST_H
 #define LIST_H
 
@@ -7,16 +10,19 @@ using namespace std;
 
 
 //=============================================================================
+// Linked list class with a variety of functions
 //=============================================================================
 class list {
     public:
         //=====================================================================
+        // Constructor
         //=====================================================================
         list(){
             head = NULL;
         } // End of list()
 
         //=====================================================================
+        // Adds node to end of list
         //=====================================================================
         void AddNode(int value){
             if(head == NULL){
@@ -34,7 +40,9 @@ class list {
             }
         } // End of AddNode(int)
 
+
         //=====================================================================
+        // Adds node at specific index in the list
         //=====================================================================
         bool AddNode(int index, int value){
             // Invalid index
@@ -62,39 +70,48 @@ class list {
 
         } // End of AddNode(int, int)
 
-        //=====================================================================
-        //=====================================================================
-        void Print(void){
-            cout << "Printing list: ";
 
-            for(node *currNode = head; currNode != NULL; currNode = currNode->next){
-                cout << currNode->value << " ";
+        //=====================================================================
+        // Concatonates one list to another, in turn setting the second list's
+        // head to NULL.
+        //=====================================================================
+        void Append(list *listB){
+            if (listB == NULL || listB->head == NULL) {
+                cout << "\n(List B is empty)\n";
+                return;
+            }
+            else if (head == NULL) {
+                head = listB->head;
+                tail = listB->tail;
+            }
+            else{
+                tail->next = listB->head;
+                tail = listB->tail;
             }
 
-            cout << endl;
+            listB->head = NULL;
+            listB->tail = NULL;
 
-        } // End of Print(void)
+        }// End of Append(node*)
 
 
         //=====================================================================
+        // Deletes entire list.
         //=====================================================================
-        node* Find(int index){
-            int counter = 0;
-            node *currNode = head;
+        void Clear(void){
+            node* prevNode = head;
 
-            if(index < 0)
-                return NULL;
-
-            while(currNode != NULL && counter < index){
-                ++counter;
-                currNode = currNode->next;
+            while(head != NULL){
+                head = head->next;
+                delete prevNode;
+                prevNode = head;
             }
 
-            return currNode;
-        }// End of Find(int)
+        }// End of Clear(void)
 
 
         //=====================================================================
+        // Deletes first occurence of a specific value from list
         //=====================================================================
         bool Delete(int target){
             node *prev = NULL;
@@ -128,20 +145,110 @@ class list {
 
 
         //=====================================================================
+        // Finds node based on specific index.
         //=====================================================================
-        void Clear(void){
-            node* prevNode = head;
+        node* Find(int index){
+            int counter = 0;
+            node *currNode = head;
 
-            while(head != NULL){
-                head = head->next;
-                delete prevNode;
-                prevNode = head;
+            if(index < 0)
+                return NULL;
+
+            while(currNode != NULL && counter < index){
+                ++counter;
+                currNode = currNode->next;
             }
 
-        }// End of Clear(void)
+            return currNode;
+        }// End of Find(int)
 
 
         //=====================================================================
+        // Returns length of list
+        //=====================================================================
+        int Length(){
+            node * currNode = head;
+            int counter = 1;
+
+            if(head == NULL){
+                return 0;
+            }
+
+            while(currNode->next != NULL){
+                currNode = currNode->next;
+                ++counter;
+            }
+
+            return counter;
+
+        }
+        //=====================================================================
+        // Remove and return first element from list.
+        //=====================================================================
+        int Pop(void){
+            if (head == NULL) {
+                return (int)NULL;
+            }
+            else{
+                int data = head->value;
+                node *temp = head;
+                head = head->next;
+                delete temp;
+                return data;
+            }
+        }// End of Pop(void)
+
+
+        //=====================================================================
+        // Prints entire list
+        //=====================================================================
+        void Print(void){
+            cout << "Printing list: ";
+
+            for(node *currNode = head; currNode != NULL; currNode = currNode->next){
+                cout << currNode->value << " ";
+            }
+
+            cout << endl;
+
+        } // End of Print(void)
+
+
+        //=====================================================================
+        // Reverses a linked list
+        //=====================================================================
+        void Reverse(void){
+            tail = head;
+            head = Reverse(head);
+            tail->next = NULL;
+        }// End of Reverse(void)
+
+
+        //=====================================================================
+        // Reverses a linked list and return pointer to head of reversed list
+        //=====================================================================
+        node* Reverse(node *currNode){
+            // Check for NULL; list does not exist
+            if(currNode == NULL)
+               return NULL;
+
+            // list with only one node.
+            if(currNode->next == NULL)
+                return currNode;
+
+            node *rest = Reverse(currNode->next);
+
+            currNode->next->next = currNode;
+
+            currNode->next = NULL;
+
+            return rest;
+
+        }// End of Reverse(void)
+
+
+        //=====================================================================
+        // Search list for specific value
         //=====================================================================
         bool Search(int target){
             // Search through list for value

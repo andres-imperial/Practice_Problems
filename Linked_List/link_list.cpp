@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cctype>
 #include "list.h"
 using namespace std;
 
@@ -10,29 +11,25 @@ void PrintMenu(void);
 int main(void){
     // Variables
     node *target = NULL;
-    list myList;
+    list myList, dummyList;
     char userInput;
-    int userVal, index;
+    int userVal, index, value;
+    // Init dummy list with values
+    dummyList.AddNode(1);
+    dummyList.AddNode(2);
+    dummyList.AddNode(3);
 
 
     while(true){
         PrintMenu();
         cin >> userInput;
-        switch (userInput){
+
+        switch (toupper(userInput)){
             //======= Add =====================================================
             case 'A':
                 cout << "Please enter value add: ";
                 cin >> userVal;
                 myList.AddNode(userVal);
-                break;
-            //======= Insert ==================================================
-            case 'I':
-                cout << "Please enter a value to add: ";
-                cin >> userVal;
-                cout << "Please enter an index to insert at: ";
-                cin >> index;
-                if(myList.AddNode(index, userVal) == false)
-                    cout << "Error: Invalid Index" << endl;
                 break;
             //======= Delete ==================================================
             case 'D':
@@ -45,17 +42,6 @@ int main(void){
                     cout << userVal << " was not found in list." << endl;
                 }
                 break;
-            //======= Search ===================================================
-            case 'S':
-                cout << "Please enter value to search for: ";
-                cin >> userVal;
-                if(myList.Search(userVal)){
-                    cout << userVal << " was found in the list." << endl;
-                }
-                else{
-                    cout << userVal << " was not found in the list." << endl;
-                }
-                break;
             //======= Find =====================================================
             case 'F':
                 cout << "Please enter index value to search for: ";
@@ -65,6 +51,57 @@ int main(void){
                     cout << "There is no information at index " << userVal << endl;
                 else{
                     cout << "The value at list index " << userVal << " is "<< target->value << endl;
+                }
+                break;
+            //======= Insert ==================================================
+            case 'I':
+                cout << "Please enter a value to add: ";
+                cin >> userVal;
+                cout << "Please enter an index to insert at: ";
+                cin >> index;
+                if(myList.AddNode(index, userVal) == false)
+                    cout << "Error: Invalid Index" << endl;
+                break;
+            //======= Link ====================================================
+            case 'L':{
+                /* if (dummyList.head == NULL) {
+                 *     cout << "Error: ListB is empty\n";
+                 *     break;
+                 * } */
+
+                list *listB = &dummyList;
+                cout << "Linking list B to your list . . . ";
+                myList.Append(listB);
+                cout << "Linked\n";
+                }
+                break;
+            //======= Pop =====================================================
+            case 'T':
+                value = myList.Pop();
+
+                if(value == NULL)
+                    cout << "Error: There is no element to pop from list.\n";
+                else{
+                    cout << "Popping first element. (note: this linked list is not"
+                        << " a strict FIFO/stack structure)\n"
+                        << "Value popped is " << value << endl;
+                }
+                break;
+            //======= Reverse ==================================================
+            case 'R':
+                cout << "Reversing your linked list . . .";
+                myList.Reverse();
+                cout << "complete!\n";
+                break;
+            //======= Search ===================================================
+            case 'S':
+                cout << "Please enter value to search for: ";
+                cin >> userVal;
+                if(myList.Search(userVal)){
+                    cout << userVal << " was found in the list." << endl;
+                }
+                else{
+                    cout << userVal << " was not found in the list." << endl;
                 }
                 break;
             //======= Print ====================================================
@@ -97,12 +134,15 @@ void PrintMenu(void){
    cout << "Main Menu\n"
         << "===========================\n"
         << "(A)dd new node\n"
-        << "(I)nsert new node\n"
-        << "(D)elete node\n"
-        << "(S)earch for node\n"
-        << "(F)ind node by index\n"
-        << "(P)rint list\n"
         << "(C)lear list\n"
+        << "(D)elete node\n"
+        << "(F)ind node by index\n"
+        << "(I)nsert new node\n"
+        << "(L)ink another list to your list\n"
+        << "(P)rint list\n"
+        << "(R)everse list\n"
+        << "(S)earch for node\n"
+        << "(T) Pop First value from list\n"
         << "(Q)uit program\n";
 }
 // End of link_list.cpp
